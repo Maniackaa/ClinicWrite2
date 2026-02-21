@@ -3,7 +3,7 @@
 ## Требования
 
 - Ubuntu/Debian сервер
-- Python 3.10 или выше
+- Python 3.12 (рекомендуется) или Python 3.10+ (минимальная версия)
 - Права root (sudo)
 
 ## Быстрая установка
@@ -15,7 +15,14 @@
 sudo apt update && sudo apt upgrade -y
 
 # Установка Python и необходимых пакетов
-sudo apt install -y python3.10 python3.10-venv python3-pip git
+# Для Python 3.12 (рекомендуется):
+sudo apt install -y software-properties-common
+sudo add-apt-repository -y ppa:deadsnakes/ppa
+sudo apt update
+sudo apt install -y python3.12 python3.12-venv python3.12-dev python3-pip git
+
+# Или для Python 3.10+:
+# sudo apt install -y python3.10 python3.10-venv python3-pip git
 ```
 
 ### 2. Клонирование репозитория

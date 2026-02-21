@@ -15,7 +15,7 @@ NC='\033[0m' # No Color
 PROJECT_NAME="clinic-bot"
 PROJECT_DIR="/opt/$PROJECT_NAME"
 SERVICE_USER="clinicbot"
-# Определяем доступную версию Python (3.10+)
+# Определяем доступную версию Python (3.12+ предпочтительно, минимум 3.10+)
 if command -v python3.12 &> /dev/null; then
     PYTHON_VERSION="python3.12"
 elif command -v python3.11 &> /dev/null; then
@@ -88,12 +88,15 @@ fi
 PYTHON_VER=$($PYTHON_VERSION --version 2>&1 | awk '{print $2}' | cut -d. -f1,2)
 echo -e "${GREEN}Найдена версия Python: $($PYTHON_VERSION --version)${NC}"
 
-# Проверяем минимальную версию (3.10+)
+# Проверяем минимальную версию (3.10+, рекомендуется 3.12+)
 PYTHON_MAJOR=$(echo $PYTHON_VER | cut -d. -f1)
 PYTHON_MINOR=$(echo $PYTHON_VER | cut -d. -f2)
 if [ "$PYTHON_MAJOR" -lt 3 ] || ([ "$PYTHON_MAJOR" -eq 3 ] && [ "$PYTHON_MINOR" -lt 10 ]); then
-    echo -e "${RED}Ошибка: Требуется Python 3.10 или выше, найдена версия $PYTHON_VER${NC}"
+    echo -e "${RED}Ошибка: Требуется Python 3.10 или выше (рекомендуется 3.12+), найдена версия $PYTHON_VER${NC}"
     exit 1
+fi
+if [ "$PYTHON_MINOR" -lt 12 ]; then
+    echo -e "${YELLOW}Предупреждение: Рекомендуется Python 3.12+, найдена версия $PYTHON_VER${NC}"
 fi
 
 # Установка зависимостей в системный Python
