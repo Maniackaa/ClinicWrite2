@@ -49,7 +49,11 @@ fi
 echo -e "${YELLOW}Создание директории проекта...${NC}"
 mkdir -p "$PROJECT_DIR"
 mkdir -p "$PROJECT_DIR/logs"
+mkdir -p "$PROJECT_DIR/data/video"
+mkdir -p "$PROJECT_DIR/data/photo"
 chown -R "$SERVICE_USER:$SERVICE_USER" "$PROJECT_DIR"
+chmod -R 755 "$PROJECT_DIR"
+chmod -R 775 "$PROJECT_DIR/logs"
 
 # Копирование файлов проекта
 echo -e "${YELLOW}Копирование файлов проекта...${NC}"
