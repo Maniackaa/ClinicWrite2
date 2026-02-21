@@ -28,7 +28,7 @@ else
     PYTHON_VERSION="python3"
 fi
 
-echo -e "${GREEN}=== Развертывание Telegram бота ROYAL Clinic ===${NC}"
+echo -e "${GREEN}=== Развертывание Telegram бота 'Объединяем компетенции' ===${NC}"
 
 # Проверка прав root
 if [ "$EUID" -ne 0 ]; then 
@@ -140,7 +140,7 @@ fi
 echo -e "${YELLOW}Установка systemd service...${NC}"
 cat > "/etc/systemd/system/$PROJECT_NAME.service" << EOF
 [Unit]
-Description=ROYAL Clinic Telegram Bot
+Description=Telegram Bot "Объединяем компетенции"
 After=network.target
 
 [Service]

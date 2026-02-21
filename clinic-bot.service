@@ -1,5 +1,5 @@
 [Unit]
-Description=ROYAL Clinic Telegram Bot
+Description=Telegram Bot "Объединяем компетенции"
 After=network.target
 
 [Service]

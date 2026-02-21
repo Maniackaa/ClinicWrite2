@@ -1,4 +1,4 @@
-# Инструкция по развертыванию бота на сервере
+# Инструкция по развертыванию бота "Объединяем компетенции"
 
 ## Требования
 
@@ -23,7 +23,7 @@ sudo apt install -y python3.10 python3.10-venv python3-pip git
 ```bash
 # Клонирование проекта
 cd /opt
-sudo git clone https://github.com/Maniackaa/ClinicWrite.git clinic-bot
+sudo git clone https://github.com/Maniackaa/ClinicWrite2.git clinic-bot
 cd clinic-bot
 ```
 
@@ -55,8 +55,9 @@ sudo nano /opt/clinic-bot/.env
 
 Заполните обязательные поля:
 - `BOT_TOKEN` - токен бота от @BotFather
-- `ADMIN_IDS` - ваш Telegram ID
-- `GROUP_ID` - ID канала для уведомлений о заявках
+- `ADMIN_IDS` - ваш Telegram ID (можно несколько через запятую)
+- `GROUP_ID` - ID канала для уведомлений о регистрациях на конференцию
+- `TIMEZONE` - часовой пояс (например, Europe/Moscow)
 
 ### 5. Запуск бота
 
@@ -134,14 +135,27 @@ sudo ./install.sh
 ```
 /opt/clinic-bot/
 ├── main.py                 # Главный файл бота
-├── handlers/              # Обработчики
-├── keyboards/             # Клавиатуры
-├── config_data/           # Конфигурация
-├── data/                  # Данные (фото врачей, прайс)
-├── logs/                  # Логи
-├── venv/                  # Виртуальное окружение
-└── .env                   # Переменные окружения
+├── handlers/               # Обработчики
+│   ├── user_handlers.py    # Обработчики пользователей
+│   ├── action_handlers.py  # Обработчики событий канала/группы
+│   └── states.py          # FSM состояния для регистрации
+├── keyboards/              # Клавиатуры
+├── config_data/            # Конфигурация
+├── data/                   # Данные проекта
+│   └── project_data.py     # Тексты и video_id
+├── logs/                   # Логи
+├── venv/                   # Виртуальное окружение
+└── .env                    # Переменные окружения
 ```
+
+## Функционал бота
+
+Бот "Объединяем компетенции" предоставляет:
+- Информацию о проекте и конференции
+- Просмотр архива прошедших мероприятий (видео)
+- Просмотр отзывов участников (видео)
+- Регистрацию на конференцию (ФИО, телефон, email)
+- Ссылки на каналы и сайт ROYAL CLINIC
 
 ## Troubleshooting
 
@@ -175,6 +189,12 @@ sudo chown -R clinicbot:clinicbot /opt/clinic-bot
 sudo -u clinicbot /opt/clinic-bot/venv/bin/pip install -r /opt/clinic-bot/requirements.txt
 ```
 
+### Бот не отвечает
+
+1. Проверьте, что токен бота правильный в .env
+2. Проверьте, что бот запущен: `sudo systemctl status clinic-bot`
+3. Проверьте логи на наличие ошибок
+
 ## Безопасность
 
 - Файл `.env` должен иметь права доступа 600:
@@ -185,3 +205,25 @@ sudo -u clinicbot /opt/clinic-bot/venv/bin/pip install -r /opt/clinic-bot/requir
 - Не коммитьте `.env` файл в git (он уже в .gitignore)
 
 - Регулярно обновляйте зависимости для безопасности
+
+## Docker развертывание (альтернатива)
+
+Если предпочитаете Docker:
+
+```bash
+# Сборка образа
+docker build -t clinic-bot .
+
+# Запуск контейнера
+docker run -d \
+  --name clinic-bot \
+  --env-file .env \
+  -v $(pwd)/logs:/app/logs \
+  clinic-bot
+```
+
+Или используйте docker-compose:
+
+```bash
+docker-compose up -d
+```
