@@ -62,6 +62,7 @@ cp -r "$SCRIPT_DIR"/.git "$PROJECT_DIR/" 2>/dev/null || true
 echo -e "${YELLOW}Установка системных зависимостей...${NC}"
 apt-get install -y \
     python3 \
+    python3.12-venv \
     python3-venv \
     python3-pip \
     git \
@@ -69,6 +70,7 @@ apt-get install -y \
     libpq-dev \
     postgresql-client \
     build-essential \
+    python3.12-dev \
     python3-dev \
     pkg-config
 
@@ -99,10 +101,19 @@ if [ "$PYTHON_MINOR" -lt 12 ]; then
     echo -e "${YELLOW}Предупреждение: Рекомендуется Python 3.12+, найдена версия $PYTHON_VER${NC}"
 fi
 
-# Установка зависимостей в системный Python
-echo -e "${YELLOW}Установка зависимостей в системный Python...${NC}"
-$PYTHON_VERSION -m pip install --upgrade pip setuptools wheel --break-system-packages
-$PYTHON_VERSION -m pip install -r "$PROJECT_DIR/requirements.txt" --break-system-packages
+# Создание виртуального окружения
+echo -e "${YELLOW}Создание виртуального окружения...${NC}"
+if [ ! -d "$PROJECT_DIR/venv" ]; then
+    sudo -u "$SERVICE_USER" $PYTHON_VERSION -m venv "$PROJECT_DIR/venv"
+    echo -e "${GREEN}Виртуальное окружение создано${NC}"
+else
+    echo -e "${GREEN}Виртуальное окружение уже существует${NC}"
+fi
+
+# Установка зависимостей в виртуальное окружение
+echo -e "${YELLOW}Установка зависимостей в виртуальное окружение...${NC}"
+sudo -u "$SERVICE_USER" "$PROJECT_DIR/venv/bin/pip" install --upgrade pip setuptools wheel
+sudo -u "$SERVICE_USER" "$PROJECT_DIR/venv/bin/pip" install -r "$PROJECT_DIR/requirements.txt"
 
 # Проверка наличия .env файла
 if [ ! -f "$PROJECT_DIR/.env" ]; then
@@ -150,7 +161,7 @@ After=network.target
 Type=simple
 User=$SERVICE_USER
 WorkingDirectory=$PROJECT_DIR
-ExecStart=$(which $PYTHON_VERSION) $PROJECT_DIR/main.py
+ExecStart=$PROJECT_DIR/venv/bin/python $PROJECT_DIR/main.py
 Restart=always
 RestartSec=10
 StandardOutput=journal

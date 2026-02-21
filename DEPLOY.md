@@ -192,8 +192,24 @@ sudo chown -R clinicbot:clinicbot /opt/clinic-bot
 ### Ошибка импорта модулей
 
 ```bash
-# Переустановка зависимостей
+# Переустановка зависимостей в виртуальном окружении
 sudo -u clinicbot /opt/clinic-bot/venv/bin/pip install -r /opt/clinic-bot/requirements.txt
+```
+
+### Ошибка "externally-managed-environment"
+
+Если вы видите ошибку о том, что окружение управляется внешне, это означает, что нужно использовать виртуальное окружение:
+
+```bash
+# Создать виртуальное окружение (если еще не создано)
+cd /opt/clinic-bot
+sudo -u clinicbot python3.12 -m venv venv
+
+# Установить зависимости в виртуальное окружение
+sudo -u clinicbot /opt/clinic-bot/venv/bin/pip install -r /opt/clinic-bot/requirements.txt
+
+# Убедиться, что systemd service использует venv
+sudo systemctl restart clinic-bot
 ```
 
 ### Бот не отвечает
