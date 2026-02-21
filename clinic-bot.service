@@ -5,8 +5,10 @@ After=network.target
 [Service]
 Type=simple
 User=clinicbot
+Group=clinicbot
 WorkingDirectory=/opt/clinic-bot
-ExecStart=/usr/bin/python3 /opt/clinic-bot/main.py
+Environment="PATH=/opt/clinic-bot/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ExecStart=/opt/clinic-bot/venv/bin/python /opt/clinic-bot/main.py
 Restart=always
 RestartSec=10
 StandardOutput=journal
