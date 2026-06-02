@@ -10,7 +10,7 @@ def get_main_menu_kb() -> InlineKeyboardMarkup:
         InlineKeyboardButton(text="🔸 Наш проект", callback_data="menu_project")
     )
     kb_builder.row(
-        InlineKeyboardButton(text="🔸 Регистрация на 14 марта", callback_data="menu_registration")
+        InlineKeyboardButton(text="🔸 Регистрация 14 июня Волгоград", callback_data="menu_registration")
     )
     kb_builder.row(
         InlineKeyboardButton(text="🔸 Подписаться на канал \"Объединяем компетенции\"", url=CHANNEL_PARTNERROYAL_URL)
